@@ -1,36 +1,232 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Spot Properties
 
-## Getting Started
+A modern, bilingual real estate platform built with Next.js 15, featuring property management, international support, and comprehensive admin tools.
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Spot Properties is a full-featured real estate application designed for managing and showcasing properties across multiple locations with support for both English and Arabic languages.
+
+### Key Features
+
+- **Bilingual Support** - Full English and Arabic localization with RTL support
+- **Property Management** - Complete CRUD operations for properties
+- **Advanced Search & Filtering** - Search by location, type, price, and more
+- **Admin Dashboard** - Comprehensive admin panel with analytics and monitoring
+- **Image Management** - Cloudinary integration for optimized image delivery
+- **Contact & Appointments** - Lead management and appointment scheduling
+- **Email Notifications** - Automated emails via Resend
+- **WhatsApp Integration** - Direct property inquiries via WhatsApp
+- **SEO Optimized** - Dynamic sitemap, metadata, and Open Graph support
+- **Production Monitoring** - Built-in health checks, logging, and cron jobs
+
+### Tech Stack
+
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **Database:** PostgreSQL with Prisma ORM
+- **Authentication:** NextAuth.js
+- **Internationalization:** next-intl
+- **Image Storage:** Cloudinary
+- **Email Service:** Resend
+- **Deployment:** Vercel
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 18.x or higher
+- PostgreSQL database
+- Cloudinary account
+- Resend account
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone <your-repo-url>
+   cd spot-properties
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your credentials
+   ```
+
+4. Set up the database
+   ```bash
+   npx prisma generate
+   npx prisma migrate dev
+   npx prisma db seed  # Optional: seed with sample data
+   ```
+
+5. Start the development server
+   ```bash
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000/en](http://localhost:3000/en) in your browser
+
+## Project Structure
+
+```
+spot-properties/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── [locale]/           # Internationalized routes
+│   │   ├── admin/              # Admin panel
+│   │   ├── api/                # API routes
+│   │   └── login/              # Authentication
+│   ├── components/             # Reusable components
+│   ├── lib/                    # Utilities and helpers
+│   ├── locales/                # Translation files (en/ar)
+│   └── middleware.ts           # Route protection
+├── prisma/
+│   ├── schema.prisma           # Database schema
+│   └── migrations/             # Database migrations
+├── public/                     # Static assets
+└── DOCUMENTATION.md            # Complete documentation
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Available Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm start            # Run production build
+npm run lint         # Run ESLint
+npx prisma studio    # Open Prisma Studio (database GUI)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Documentation
 
-## Learn More
+For complete documentation including deployment, monitoring, backup strategies, and troubleshooting, see:
 
-To learn more about Next.js, take a look at the following resources:
+**[DOCUMENTATION.md](./DOCUMENTATION.md)**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This comprehensive guide covers:
+- Development setup and configuration
+- Production deployment to Vercel
+- Environment variables reference
+- Code quality and linting
+- System monitoring and health checks
+- Backup and disaster recovery
+- Maintenance procedures
+- Troubleshooting guide
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment Variables
 
-## Deploy on Vercel
+Required environment variables:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```env
+DATABASE_URL                        # PostgreSQL connection string
+NEXTAUTH_SECRET                     # Authentication secret
+NEXTAUTH_URL                        # Application URL
+NEXT_PUBLIC_APP_URL                 # Public application URL
+ADMIN_EMAIL                         # Admin login email
+ADMIN_PASSWORD                      # Admin login password
+CLOUDINARY_CLOUD_NAME               # Cloudinary cloud name
+CLOUDINARY_API_KEY                  # Cloudinary API key
+CLOUDINARY_API_SECRET               # Cloudinary API secret
+RESEND_API_KEY                      # Resend email API key
+CRON_SECRET                         # Cron job authentication
+NEXT_PUBLIC_WHATSAPP_NUMBER         # WhatsApp contact (optional)
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See `.env.production` for a complete template.
+
+## Deployment
+
+### Quick Deploy to Vercel
+
+1. Push your code to a Git repository (GitHub, GitLab, or Bitbucket)
+2. Visit [Vercel](https://vercel.com/new)
+3. Import your repository
+4. Add environment variables
+5. Deploy
+
+For detailed deployment instructions, see [DOCUMENTATION.md](./DOCUMENTATION.md#deployment-guide).
+
+## Production Features
+
+### Monitoring & Logging
+- Health check endpoint (`/api/health`)
+- System logs with filtering (`/admin/system-logs`)
+- Real-time system status dashboard (`/admin/system`)
+- Vercel Analytics and Speed Insights
+- Error tracking and alerting
+
+### Automated Maintenance
+- Daily log cleanup (2 AM UTC)
+- Daily appointment checks (8 AM UTC)
+- Weekly analytics snapshots (Sunday midnight)
+
+### Security
+- Protected admin routes with NextAuth
+- Secure cron job endpoints
+- Environment variable validation
+- SQL injection prevention with Prisma
+- XSS protection
+
+## Admin Panel
+
+Access the admin panel at `/admin` after logging in:
+
+- **Dashboard** - Overview of properties, leads, and appointments
+- **Properties** - Manage property listings
+- **Appointments** - View and manage appointments
+- **Leads** - Track contact form submissions
+- **Activity Logs** - Monitor user actions
+- **System Status** - Production health monitoring
+- **System Logs** - Advanced logging and debugging
+- **Settings** - Application configuration
+
+## API Routes
+
+Key API endpoints:
+
+- `/api/properties` - Property CRUD operations
+- `/api/leads` - Lead management
+- `/api/appointments` - Appointment handling
+- `/api/upload` - Image upload to Cloudinary
+- `/api/health` - Health check and system status
+- `/api/admin/*` - Admin-only endpoints
+
+## Internationalization
+
+The application supports:
+- **English (en)** - Default locale
+- **Arabic (ar)** - Full RTL support
+
+Routes are automatically prefixed with locale:
+- `/en/properties` - English properties page
+- `/ar/properties` - Arabic properties page
+
+## Support
+
+For questions, issues, or contributions:
+
+- Check [DOCUMENTATION.md](./DOCUMENTATION.md) for detailed guides
+- Review the [Troubleshooting](./DOCUMENTATION.md#troubleshooting) section
+- Consult official documentation:
+  - [Next.js Documentation](https://nextjs.org/docs)
+  - [Prisma Documentation](https://www.prisma.io/docs)
+  - [Vercel Documentation](https://vercel.com/docs)
+
+## License
+
+[Your License Here]
+
+---
+
+**Version:** 1.0.0
+
+**Status:** Production Ready ✅
+
+For complete documentation, see [DOCUMENTATION.md](./DOCUMENTATION.md)
