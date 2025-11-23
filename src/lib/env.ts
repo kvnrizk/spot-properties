@@ -84,7 +84,8 @@ export function validateEnv() {
   }
 }
 
-// Run validation in production
-if (process.env.NODE_ENV === "production") {
+// Run validation in production (but not during build time)
+// During build, some env vars like VERCEL_URL may not be available yet
+if (process.env.NODE_ENV === "production" && typeof window !== "undefined") {
   validateEnv();
 }
