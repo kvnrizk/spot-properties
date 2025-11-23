@@ -48,7 +48,8 @@ export function validateEnv() {
   const requiredEnvVars = {
     DATABASE_URL: process.env.DATABASE_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    // NEXTAUTH_URL can be auto-generated from VERCEL_URL in Vercel deployments
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined),
   };
 
   const missing = Object.entries(requiredEnvVars)
