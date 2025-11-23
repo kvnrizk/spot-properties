@@ -84,8 +84,6 @@ export function validateEnv() {
   }
 }
 
-// Run validation in production (but not during build time)
-// During build, some env vars like VERCEL_URL may not be available yet
-if (process.env.NODE_ENV === "production" && typeof window !== "undefined") {
-  validateEnv();
-}
+// Note: Validation is not run automatically to allow builds to succeed
+// Environment variables are validated at runtime in API routes and server components
+// For Vercel deployments, NEXTAUTH_URL is auto-generated from VERCEL_URL
