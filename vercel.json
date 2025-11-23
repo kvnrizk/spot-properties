@@ -77,10 +77,6 @@
     {
       "path": "/api/cron/check-appointments",
       "schedule": "0 8 * * *"
-    },
-    {
-      "path": "/api/cron/weekly-analytics",
-      "schedule": "0 0 * * 0"
     }
   ]
 }
