@@ -88,7 +88,7 @@ export function MobileNav() {
         aria-label={t("nav.menu")}
       >
         {/* Close Button */}
-        <div className="flex justify-end p-4 bg-spot-beige border-b border-spot-dark/10">
+        <div className="flex justify-end px-4 pt-4 pb-2 bg-spot-beige">
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 text-spot-dark hover:text-spot-red transition-colors rounded-md hover:bg-white/50 active:scale-95"
@@ -99,7 +99,7 @@ export function MobileNav() {
         </div>
 
         {/* Menu Items */}
-        <nav className="flex-1 flex flex-col px-4 py-4 overflow-y-auto bg-spot-beige">
+        <nav className="flex-1 flex flex-col px-4 pt-0 pb-4 overflow-y-auto bg-spot-beige">
           {menuItems.map((item) => {
             const Icon = item.icon;
             return (
