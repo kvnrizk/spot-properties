@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ImageUploader } from "@/components/properties/image-uploader";
 import Image from "next/image";
-import { Trash2, Star, ArrowUp, ArrowDown } from "lucide-react";
+import { Trash2, Star, ArrowUp, ArrowDown, Save, Check } from "lucide-react";
 import { PageHeader } from "@/components/admin/page-header";
 import { Breadcrumbs } from "@/components/admin/breadcrumbs";
 import { toast } from "sonner";
@@ -42,6 +42,11 @@ export default function EditPropertyPage() {
     featured: false,
     published: false,
   });
+  const [autoSaved, setAutoSaved] = useState(false);
+  const [saveTimeout, setSaveTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  // Get localStorage key for this property
+  const getLocalStorageKey = () => `property_draft_${propertyId}`;
 
   useEffect(() => {
     fetchProperty();
@@ -90,7 +95,7 @@ export default function EditPropertyPage() {
       if (response.ok) {
         const property = await response.json();
 
-        setFormData({
+        const fetchedData = {
           title: property.title || "",
           country: property.country || "Lebanon",
           city: property.city || "",
@@ -105,7 +110,27 @@ export default function EditPropertyPage() {
           description: property.description || "",
           featured: property.isFeatured || false,
           published: property.isPublished || false,
-        });
+        };
+
+        // Check if there's a saved draft in localStorage
+        const savedDraft = localStorage.getItem(getLocalStorageKey());
+        if (savedDraft) {
+          try {
+            const draftData = JSON.parse(savedDraft);
+            // Ask user if they want to restore the draft
+            if (confirm("You have unsaved changes. Do you want to restore them?")) {
+              setFormData(draftData);
+              toast.info("Draft restored");
+            } else {
+              setFormData(fetchedData);
+              localStorage.removeItem(getLocalStorageKey());
+            }
+          } catch (e) {
+            setFormData(fetchedData);
+          }
+        } else {
+          setFormData(fetchedData);
+        }
 
         if (property.images) {
           setImages(property.images.sort((a: PropertyImage, b: PropertyImage) => a.order - b.order));
@@ -117,6 +142,32 @@ export default function EditPropertyPage() {
       setLoading(false);
     }
   };
+
+  // Auto-save to localStorage with debouncing
+  useEffect(() => {
+    if (loading) return; // Don't save during initial load
+
+    // Clear any existing timeout
+    if (saveTimeout) {
+      clearTimeout(saveTimeout);
+    }
+
+    // Set new timeout to save after 1 second of no changes
+    const timeout = setTimeout(() => {
+      localStorage.setItem(getLocalStorageKey(), JSON.stringify(formData));
+      setAutoSaved(true);
+
+      // Hide the "saved" indicator after 2 seconds
+      setTimeout(() => setAutoSaved(false), 2000);
+    }, 1000);
+
+    setSaveTimeout(timeout);
+
+    // Cleanup on unmount
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [formData, loading]);
 
   const handleImageUpload = async (image: { url: string; publicId: string }) => {
     try {
@@ -241,6 +292,8 @@ export default function EditPropertyPage() {
       });
 
       if (response.ok) {
+        // Clear the draft from localStorage after successful save
+        localStorage.removeItem(getLocalStorageKey());
         toast.success("Property updated successfully");
         router.push("/admin/properties");
       } else {
@@ -286,10 +339,18 @@ export default function EditPropertyPage() {
           { label: "Edit Property" },
         ]}
       />
-      <PageHeader
-        title="Edit Property"
-        description={`Property ID: ${propertyId}`}
-      />
+      <div className="flex items-center justify-between">
+        <PageHeader
+          title="Edit Property"
+          description={`Property ID: ${propertyId}`}
+        />
+        {autoSaved && (
+          <div className="flex items-center gap-2 text-green-600 text-sm font-medium bg-green-50 px-3 py-1.5 rounded-md border border-green-200">
+            <Check className="h-4 w-4" />
+            Draft saved
+          </div>
+        )}
+      </div>
 
       <form onSubmit={handleSubmit} className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
         <div className="mb-6">
