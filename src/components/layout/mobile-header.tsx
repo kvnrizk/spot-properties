@@ -35,19 +35,30 @@ export function MobileHeader({ children }: MobileHeaderProps) {
       setLastScrollY(currentScrollY);
     };
 
-    // Add scroll event listener with passive option for better performance
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Throttle scroll events for better performance
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
-    // Cleanup
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", onScroll);
   }, [lastScrollY]);
 
   return (
     <header
       className={`
-        border-b border-spot-dark/10 bg-white/50 backdrop-blur-sm
-        sticky top-0 z-50
-        transition-transform duration-300 ease-in-out
+        fixed top-0 left-0 right-0 z-50
+        border-b border-spot-dark/10 bg-spot-beige
+        transition-transform duration-200 ease-in-out
+        shadow-sm
         ${isVisible ? "translate-y-0" : "-translate-y-full"}
       `}
     >

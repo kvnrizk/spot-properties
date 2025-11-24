@@ -286,13 +286,39 @@ export function FilterForm({
           <div className={`flex flex-col sm:flex-row gap-3 ${isRTL ? "sm:flex-row-reverse" : ""}`}>
             <button
               onClick={handleApplyFilters}
-              className="flex-1 px-6 py-3 bg-spotRed text-white rounded-lg hover:bg-red-700 transition-colors font-medium text-center shadow-sm hover:shadow-md"
+              className="flex-1 px-6 py-3 rounded-lg transition-all font-medium text-center shadow-sm hover:shadow-md"
+              style={{
+                backgroundColor: '#9b1f1f',
+                color: '#ffffff',
+                border: '2px solid #9b1f1f'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#7d1919';
+                e.currentTarget.style.color = '#ffffff';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#9b1f1f';
+                e.currentTarget.style.color = '#ffffff';
+              }}
             >
               {translations.applyFilters}
             </button>
             <button
               onClick={handleReset}
-              className="flex-1 px-6 py-3 bg-white border-2 border-spotDark text-spotDark rounded-lg hover:bg-spotDark hover:text-white transition-colors font-medium text-center shadow-sm"
+              className="flex-1 px-6 py-3 rounded-lg transition-all font-medium text-center shadow-sm"
+              style={{
+                backgroundColor: '#ffffff',
+                color: '#1f1b18',
+                border: '2px solid #1f1b18'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#1f1b18';
+                e.currentTarget.style.color = '#ffffff';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#ffffff';
+                e.currentTarget.style.color = '#1f1b18';
+              }}
             >
               {translations.resetFilters}
             </button>

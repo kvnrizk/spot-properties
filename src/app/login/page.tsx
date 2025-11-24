@@ -103,7 +103,7 @@ function LoginForm() {
 
             <Button
               type="submit"
-              className="w-full bg-spot-red hover:bg-spot-red/90 text-white"
+              className="w-full !bg-spot-red hover:!bg-spot-red/90 !text-white"
               disabled={isLoading}
             >
               {isLoading ? "Signing in..." : "Sign In"}

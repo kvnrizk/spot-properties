@@ -31,15 +31,19 @@ export function PropertyActions({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete property");
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.error || "Failed to delete property";
+        throw new Error(errorMessage);
       }
 
       toast.success("Property deleted successfully");
       router.refresh();
-      setShowDeleteModal(false);
+      // Modal will be closed by ConfirmModal component after this completes
     } catch (error) {
       console.error("Error deleting property:", error);
-      toast.error("Failed to delete property");
+      const errorMessage = error instanceof Error ? error.message : "Failed to delete property";
+      toast.error(errorMessage);
+      throw error; // Re-throw to prevent modal from closing on error
     } finally {
       setIsDeleting(false);
     }

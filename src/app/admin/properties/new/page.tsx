@@ -20,6 +20,7 @@ export default function NewPropertyPage() {
     type: "Apartment",
     status: "For Sale",
     price: "",
+    currency: "USD",
     area: "",
     bedrooms: "",
     bathrooms: "",
@@ -27,6 +28,25 @@ export default function NewPropertyPage() {
     featured: false,
     published: false,
   });
+
+  // Format number with thousand separators
+  const formatNumber = (num: string): string => {
+    const cleanNum = num.replace(/\s/g, "");
+    if (!cleanNum || isNaN(Number(cleanNum))) return num;
+    return Number(cleanNum).toLocaleString("en-US").replace(/,/g, " ");
+  };
+
+  // Remove formatting for submission
+  const unformatNumber = (num: string): string => {
+    return num.replace(/\s/g, "");
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\s/g, "");
+    if (value === "" || /^\d+$/.test(value)) {
+      setFormData({ ...formData, price: formatNumber(value) });
+    }
+  };
 
   const handleImageUpload = (image: { url: string; publicId: string }) => {
     setImages((prev) => [...prev, image]);
@@ -50,8 +70,8 @@ export default function NewPropertyPage() {
       description: formData.description || null,
       type: formData.type.toUpperCase().replace(" ", "_"),
       status: formData.status.toUpperCase().replace(" ", "_"),
-      price: parseFloat(formData.price),
-      currency: "USD",
+      price: parseFloat(unformatNumber(formData.price)),
+      currency: formData.currency,
       country: formData.country,
       city: formData.city,
       region: formData.region || null,
@@ -179,6 +199,7 @@ export default function NewPropertyPage() {
               <option value="Land">Land</option>
               <option value="Office">Office</option>
               <option value="Airbnb">Airbnb</option>
+              <option value="Other">Other</option>
             </select>
           </div>
 
@@ -198,18 +219,38 @@ export default function NewPropertyPage() {
           </div>
 
           <div>
-            <label htmlFor="price" className="block text-sm font-medium text-spotDark mb-2">
-              Price ($)
+            <label htmlFor="currency" className="block text-sm font-medium text-spotDark mb-2">
+              Currency
             </label>
-            <input
-              type="number"
-              id="price"
-              value={formData.price}
-              onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+            <select
+              id="currency"
+              value={formData.currency}
+              onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-spotRed"
-              placeholder="Enter price"
-              required
-            />
+            >
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="price" className="block text-sm font-medium text-spotDark mb-2">
+              Price
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">
+                {formData.currency === "USD" ? "$" : "€"}
+              </span>
+              <input
+                type="text"
+                id="price"
+                value={formData.price}
+                onChange={handlePriceChange}
+                placeholder="160 000"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-spotRed"
+                required
+              />
+            </div>
           </div>
 
           <div>
@@ -307,7 +348,7 @@ export default function NewPropertyPage() {
         </div>
 
         <div className="flex gap-4 mt-8 pt-6 border-t border-gray-200">
-          <Button type="submit" className="bg-spotRed hover:bg-spotRed/90 text-white">
+          <Button type="submit" variant="default" className="!bg-spotRed hover:!bg-spotRed/90 !text-white">
             Create Property
           </Button>
           <Link href="/admin/properties">

@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
-import { Menu, X, Home, Building2, MapPin, Info, Mail } from "lucide-react";
+import { Menu, X, Home, Building2, MapPin, Info, Mail, Globe } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
+import { LanguageSwitcher } from "./language-switcher";
 
-export function MobileMenu() {
+export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
   const t = useTranslations();
   const locale = useLocale();
@@ -43,19 +44,24 @@ export function MobileMenu() {
 
   return (
     <>
-      {/* Hamburger Button */}
+      {/* Hamburger Button - Only visible on mobile */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden p-2 text-spot-dark hover:text-spot-red transition-colors"
+        className="lg:hidden p-2 rounded-md hover:bg-spot-beige/30 text-spot-dark transition-colors active:scale-95"
         aria-label={isOpen ? "Close menu" : "Open menu"}
+        aria-expanded={isOpen}
       >
-        {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        {isOpen ? (
+          <X className="w-6 h-6" />
+        ) : (
+          <Menu className="w-6 h-6" />
+        )}
       </button>
 
       {/* Backdrop Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/60 z-[998] lg:hidden backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
           aria-hidden="true"
         />
@@ -64,8 +70,9 @@ export function MobileMenu() {
       {/* Mobile Menu Drawer */}
       <div
         className={`
-          fixed top-0 bottom-0 w-[280px] bg-spot-beige z-50 lg:hidden
+          fixed top-0 h-screen w-[280px] bg-spot-beige z-[999] lg:hidden
           shadow-2xl transition-transform duration-300 ease-in-out
+          flex flex-col
           ${isRTL ? "left-0" : "right-0"}
           ${
             isOpen
@@ -76,15 +83,15 @@ export function MobileMenu() {
           }
         `}
         dir={isRTL ? "rtl" : "ltr"}
+        role="dialog"
+        aria-modal="true"
+        aria-label={t("nav.menu")}
       >
-        {/* Menu Header */}
-        <div className="flex items-center justify-between p-4 border-b border-spot-dark/10">
-          <h2 className="text-lg font-bold text-spot-dark">
-            {t("nav.menu")}
-          </h2>
+        {/* Close Button */}
+        <div className="flex justify-end p-4 bg-spot-beige border-b border-spot-dark/10">
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 text-spot-dark hover:text-spot-red transition-colors"
+            className="p-2 text-spot-dark hover:text-spot-red transition-colors rounded-md hover:bg-white/50 active:scale-95"
             aria-label="Close menu"
           >
             <X className="w-5 h-5" />
@@ -92,26 +99,37 @@ export function MobileMenu() {
         </div>
 
         {/* Menu Items */}
-        <nav className="flex flex-col p-4">
+        <nav className="flex-1 flex flex-col px-4 py-4 overflow-y-auto bg-spot-beige">
           {menuItems.map((item) => {
             const Icon = item.icon;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center gap-3 px-4 py-3 text-spot-dark hover:bg-white/50 hover:text-spot-red rounded-lg transition-all duration-200 group"
+                className="flex items-center gap-3 px-4 py-3.5 mb-1 text-spot-dark hover:bg-white hover:text-spot-red rounded-lg transition-all duration-200 group font-medium"
               >
-                <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                <span className="font-medium">{item.label}</span>
+                <Icon className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <span>{item.label}</span>
               </Link>
             );
           })}
+
+          {/* Language Switcher in Drawer */}
+          <div className="mt-auto pt-4 border-t-2 border-spot-dark/10">
+            <div className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-spot-dark/70 uppercase tracking-wider">
+              <Globe className="w-4 h-4" />
+              <span>{isRTL ? "اللغة" : "Language"}</span>
+            </div>
+            <div className="px-4 py-2">
+              <LanguageSwitcher />
+            </div>
+          </div>
         </nav>
 
-        {/* Menu Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-spot-dark/10 bg-white/30">
-          <p className="text-xs text-spot-dark/60 text-center">
-            {t("footer.copyright")}
+        {/* Menu Footer - Copyright at the end */}
+        <div className="p-4 border-t-2 border-spot-dark/10 bg-spot-beige">
+          <p className="text-xs text-spot-dark/70 text-center font-medium">
+            © 2024 Spot Properties
           </p>
         </div>
       </div>

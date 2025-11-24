@@ -4,6 +4,7 @@ import { Search, MapPin, Bed, Bath, Home, Building2, TreePine, Briefcase, Plane,
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { generateWhatsAppLink, getDefaultWhatsAppMessage } from "@/lib/whatsapp";
 
 interface Property {
   id: string;
@@ -72,11 +73,18 @@ function Hero() {
               <label className="block text-xs font-semibold text-spot-dark uppercase tracking-wider mb-2">
                 {t("hero.country")}
               </label>
-              <select className="w-full px-4 py-3 border-2 border-spot-dark/20 rounded-md text-spot-dark bg-white focus:outline-none focus:border-spot-red transition-colors">
-                <option>{t("hero.allCountries")}</option>
-                <option>{t("nav.lebanon")}</option>
-                <option>{t("nav.cyprus")}</option>
-              </select>
+              <div className="relative">
+                <select className="w-full px-4 py-3 pr-10 border-2 border-spot-dark/20 rounded-md text-spot-dark bg-white focus:outline-none focus:border-spot-red transition-colors appearance-none cursor-pointer">
+                  <option>{t("hero.allCountries")}</option>
+                  <option>{t("nav.lebanon")}</option>
+                  <option>{t("nav.cyprus")}</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg className="w-5 h-5 text-spot-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
             </div>
 
             {/* Type Select */}
@@ -84,13 +92,20 @@ function Hero() {
               <label className="block text-xs font-semibold text-spot-dark uppercase tracking-wider mb-2">
                 {t("hero.type")}
               </label>
-              <select className="w-full px-4 py-3 border-2 border-spot-dark/20 rounded-md text-spot-dark bg-white focus:outline-none focus:border-spot-red transition-colors">
-                <option>{t("hero.allTypes")}</option>
-                <option>{t("categories.apartments")}</option>
-                <option>{t("categories.villas")}</option>
-                <option>{t("categories.land")}</option>
-                <option>{t("categories.offices")}</option>
-              </select>
+              <div className="relative">
+                <select className="w-full px-4 py-3 pr-10 border-2 border-spot-dark/20 rounded-md text-spot-dark bg-white focus:outline-none focus:border-spot-red transition-colors appearance-none cursor-pointer">
+                  <option>{t("hero.allTypes")}</option>
+                  <option>{t("categories.apartments")}</option>
+                  <option>{t("categories.villas")}</option>
+                  <option>{t("categories.land")}</option>
+                  <option>{t("categories.offices")}</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg className="w-5 h-5 text-spot-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
             </div>
 
             {/* Min Price */}
@@ -368,6 +383,12 @@ function AboutSection() {
 function CTASection() {
   const t = useTranslations();
 
+  const handleWhatsAppClick = () => {
+    const message = getDefaultWhatsAppMessage();
+    const link = generateWhatsAppLink(message);
+    window.open(link, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-[#ecddc9]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -379,10 +400,15 @@ function CTASection() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
-          <button className="w-full sm:w-auto bg-spot-dark hover:bg-spot-dark/90 text-white font-semibold py-3 sm:py-4 px-8 sm:px-10 rounded-md transition-all duration-200 border-2 border-spot-dark hover:shadow-2xl text-base sm:text-lg">
-            {t("cta.contact")}
-          </button>
-          <button className="w-full sm:w-auto bg-transparent hover:bg-spot-dark/5 text-spot-dark font-semibold py-3 sm:py-4 px-8 sm:px-10 rounded-md transition-all duration-200 border-2 border-spot-dark text-base sm:text-lg">
+          <Link href="/contact">
+            <button className="w-full sm:w-auto bg-spot-dark hover:bg-spot-dark/90 text-white font-semibold py-3 sm:py-4 px-8 sm:px-10 rounded-md transition-all duration-200 border-2 border-spot-dark hover:shadow-2xl text-base sm:text-lg">
+              {t("cta.contact")}
+            </button>
+          </Link>
+          <button
+            onClick={handleWhatsAppClick}
+            className="w-full sm:w-auto bg-transparent hover:bg-spot-dark/5 text-spot-dark font-semibold py-3 sm:py-4 px-8 sm:px-10 rounded-md transition-all duration-200 border-2 border-spot-dark text-base sm:text-lg"
+          >
             {t("cta.whatsapp")}
           </button>
         </div>

@@ -250,7 +250,7 @@ export function SettingsForm({ initialData }: SettingsFormProps) {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button type="submit" disabled={isLoading} size="lg">
+        <Button type="submit" disabled={isLoading} size="lg" className="!bg-spotRed hover:!bg-spotRed/90 !text-white">
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

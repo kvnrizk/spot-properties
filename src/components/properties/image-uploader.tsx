@@ -32,6 +32,19 @@ export function ImageUploader({ onUpload, images = [], onDelete }: ImageUploader
     try {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
+
+        // Client-side validation
+        if (!file.type.startsWith("image/")) {
+          alert(`"${file.name}" is not a valid image file. Only images are allowed.`);
+          continue;
+        }
+
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+          alert(`"${file.name}" is too large. Maximum file size is 10MB.`);
+          continue;
+        }
+
         const formData = new FormData();
         formData.append("file", file);
 
@@ -41,7 +54,8 @@ export function ImageUploader({ onUpload, images = [], onDelete }: ImageUploader
         });
 
         if (!response.ok) {
-          throw new Error("Upload failed");
+          const error = await response.json();
+          throw new Error(error.error || "Upload failed");
         }
 
         const result = await response.json();
@@ -51,7 +65,8 @@ export function ImageUploader({ onUpload, images = [], onDelete }: ImageUploader
       }
     } catch (error) {
       console.error("Upload error:", error);
-      alert("Failed to upload images");
+      const errorMessage = error instanceof Error ? error.message : "Failed to upload images";
+      alert(errorMessage);
     } finally {
       setUploading(false);
       if (fileInputRef.current) {

@@ -34,6 +34,7 @@ export default function EditPropertyPage() {
     type: "Apartment",
     status: "For Sale",
     price: "",
+    currency: "USD",
     area: "",
     bedrooms: "",
     bathrooms: "",
@@ -46,6 +47,43 @@ export default function EditPropertyPage() {
     fetchProperty();
   }, [propertyId]);
 
+  // Convert database format to form format
+  const dbToFormType = (dbType: string): string => {
+    const typeMap: { [key: string]: string } = {
+      "APARTMENT": "Apartment",
+      "HOUSE": "House",
+      "VILLA": "Villa",
+      "LAND": "Land",
+      "OFFICE": "Office",
+      "AIRBNB": "Airbnb",
+      "OTHER": "Other"
+    };
+    return typeMap[dbType] || "Apartment";
+  };
+
+  const dbToFormStatus = (dbStatus: string): string => {
+    return dbStatus === "FOR_SALE" ? "For Sale" : "For Rent";
+  };
+
+  // Format number with thousand separators
+  const formatNumber = (num: string): string => {
+    const cleanNum = num.replace(/\s/g, "");
+    if (!cleanNum || isNaN(Number(cleanNum))) return num;
+    return Number(cleanNum).toLocaleString("en-US").replace(/,/g, " ");
+  };
+
+  // Remove formatting for submission
+  const unformatNumber = (num: string): string => {
+    return num.replace(/\s/g, "");
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\s/g, "");
+    if (value === "" || /^\d+$/.test(value)) {
+      setFormData({ ...formData, price: formatNumber(value) });
+    }
+  };
+
   const fetchProperty = async () => {
     try {
       const response = await fetch(`/api/properties/${propertyId}`);
@@ -57,9 +95,10 @@ export default function EditPropertyPage() {
           country: property.country || "Lebanon",
           city: property.city || "",
           region: property.region || "",
-          type: property.type || "Apartment",
-          status: property.status || "For Sale",
-          price: property.price?.toString() || "",
+          type: dbToFormType(property.type),
+          status: dbToFormStatus(property.status),
+          price: property.price ? formatNumber(property.price.toString()) : "",
+          currency: property.currency || "USD",
           area: property.area?.toString() || "",
           bedrooms: property.bedrooms?.toString() || "",
           bathrooms: property.bathrooms?.toString() || "",
@@ -182,7 +221,8 @@ export default function EditPropertyPage() {
       description: formData.description || null,
       type: formData.type.toUpperCase().replace(" ", "_"),
       status: formData.status.toUpperCase().replace(" ", "_"),
-      price: parseFloat(formData.price),
+      price: parseFloat(unformatNumber(formData.price)),
+      currency: formData.currency,
       country: formData.country,
       city: formData.city,
       region: formData.region || null,
@@ -400,9 +440,10 @@ export default function EditPropertyPage() {
               <option value="Apartment">Apartment</option>
               <option value="House">House</option>
               <option value="Villa">Villa</option>
-              <option value="Villa">Land</option>
+              <option value="Land">Land</option>
               <option value="Office">Office</option>
               <option value="Airbnb">Airbnb</option>
+              <option value="Other">Other</option>
             </select>
           </div>
 
@@ -422,17 +463,38 @@ export default function EditPropertyPage() {
           </div>
 
           <div>
-            <label htmlFor="price" className="block text-sm font-medium text-spotDark mb-2">
-              Price ($)
+            <label htmlFor="currency" className="block text-sm font-medium text-spotDark mb-2">
+              Currency
             </label>
-            <input
-              type="number"
-              id="price"
-              value={formData.price}
-              onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+            <select
+              id="currency"
+              value={formData.currency}
+              onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-spotRed"
-              required
-            />
+            >
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="price" className="block text-sm font-medium text-spotDark mb-2">
+              Price
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">
+                {formData.currency === "USD" ? "$" : "€"}
+              </span>
+              <input
+                type="text"
+                id="price"
+                value={formData.price}
+                onChange={handlePriceChange}
+                placeholder="160 000"
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-spotRed"
+                required
+              />
+            </div>
           </div>
 
           <div>
@@ -529,7 +591,7 @@ export default function EditPropertyPage() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="bg-spotRed hover:bg-spotRed/90 text-white">
+            <Button type="submit" variant="default" className="!bg-spotRed hover:!bg-spotRed/90 !text-white">
               Save Changes
             </Button>
           </div>

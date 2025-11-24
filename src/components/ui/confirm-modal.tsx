@@ -1,11 +1,12 @@
 "use client";
 
 import { X } from "lucide-react";
+import { useState } from "react";
 
 interface ConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => void | Promise<void>;
   title: string;
   message: string;
   confirmText?: string;
@@ -21,11 +22,20 @@ export function ConfirmModal({
   confirmText = "Yes",
   cancelText = "No",
 }: ConfirmModalProps) {
+  const [isConfirming, setIsConfirming] = useState(false);
+
   if (!isOpen) return null;
 
-  const handleConfirm = () => {
-    onConfirm();
-    onClose();
+  const handleConfirm = async () => {
+    setIsConfirming(true);
+    try {
+      await onConfirm();
+      onClose();
+    } catch (error) {
+      console.error("Error in confirm action:", error);
+    } finally {
+      setIsConfirming(false);
+    }
   };
 
   return (
@@ -60,15 +70,17 @@ export function ConfirmModal({
         <div className="flex gap-3 p-6 border-t-2 border-spot-dark/10">
           <button
             onClick={onClose}
-            className="flex-1 px-6 py-3 rounded-md border-2 border-spot-dark/20 text-spot-dark font-semibold hover:bg-spot-beige transition-all"
+            disabled={isConfirming}
+            className="flex-1 px-6 py-3 rounded-md border-2 border-spot-dark/20 text-spot-dark font-semibold hover:bg-spot-beige transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {cancelText}
           </button>
           <button
             onClick={handleConfirm}
-            className="flex-1 px-6 py-3 rounded-md bg-spot-red hover:bg-spot-red/90 text-white font-semibold border-2 border-spot-red transition-all"
+            disabled={isConfirming}
+            className="flex-1 px-6 py-3 rounded-md bg-spot-red hover:bg-spot-red/90 text-white font-semibold border-2 border-spot-red transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {confirmText}
+            {isConfirming ? "Processing..." : confirmText}
           </button>
         </div>
       </div>

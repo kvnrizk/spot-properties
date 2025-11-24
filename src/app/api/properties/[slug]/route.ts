@@ -5,11 +5,11 @@ import { sanitizeInput, sanitizeHTML } from "@/lib/sanitize";
 import { logActivity, ActivityAction, ActivityEntity } from "@/lib/activity-logger";
 import { auth } from "@/lib/auth";
 
-// Helper to check if string is a UUID
-function isUUID(str: string): boolean {
-  const uuidRegex =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  return uuidRegex.test(str);
+// Helper to check if string is a CUID (Prisma default ID format)
+// CUIDs start with 'c' and are 25 characters long, alphanumeric
+function isCUID(str: string): boolean {
+  const cuidRegex = /^c[a-z0-9]{24}$/i;
+  return cuidRegex.test(str);
 }
 
 export async function GET(
@@ -18,7 +18,7 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const isId = isUUID(slug);
+    const isId = isCUID(slug);
 
     const property = await db.property.findUnique({
       where: isId ? { id: slug } : { slug },
@@ -69,7 +69,7 @@ export async function PATCH(
     const body = await request.json();
 
     // PATCH should only work with IDs (admin operation)
-    if (!isUUID(slug)) {
+    if (!isCUID(slug)) {
       return NextResponse.json(
         { error: "Invalid property ID" },
         { status: 400 }
@@ -183,16 +183,19 @@ export async function DELETE(
     const { slug } = await params;
 
     // DELETE should only work with IDs (admin operation)
-    if (!isUUID(slug)) {
+    if (!isCUID(slug)) {
       return NextResponse.json(
         { error: "Invalid property ID" },
         { status: 400 }
       );
     }
 
-    // Check if property exists
+    // Check if property exists and get its images
     const property = await db.property.findUnique({
       where: { id: slug },
+      include: {
+        images: true,
+      },
     });
 
     if (!property) {
@@ -202,6 +205,17 @@ export async function DELETE(
       );
     }
 
+    // Delete images from Cloudinary first
+    if (property.images && property.images.length > 0) {
+      const { deleteImage } = await import("@/lib/cloudinary");
+
+      // Delete all images from Cloudinary in parallel
+      await Promise.allSettled(
+        property.images.map((image) => deleteImage(image.publicId))
+      );
+    }
+
+    // Delete property from database (cascade will delete image records)
     await db.property.delete({
       where: { id: slug },
     });
