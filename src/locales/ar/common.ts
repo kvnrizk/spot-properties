@@ -1,5 +1,7 @@
 export default {
   nav: {
+    home: "الرئيسية",
+    menu: "القائمة",
     properties: "العقارات",
     lebanon: "لبنان",
     cyprus: "قبرص",

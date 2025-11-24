@@ -1,5 +1,7 @@
 export default {
   nav: {
+    home: "Home",
+    menu: "Menu",
     properties: "Properties",
     lebanon: "Lebanon",
     cyprus: "Cyprus",

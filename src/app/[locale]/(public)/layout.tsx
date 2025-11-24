@@ -7,6 +7,8 @@ import { MapPin } from "lucide-react";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { FloatingWhatsAppButton } from "@/components/whatsapp/floating-whatsapp-button";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { MobileHeader } from "@/components/layout/mobile-header";
+import { MobileMenu } from "@/components/layout/mobile-menu";
 import { useTranslations, useLocale } from "next-intl";
 
 export default function PublicLayout({
@@ -20,7 +22,7 @@ export default function PublicLayout({
   return (
     <SessionProvider>
       <div className="min-h-screen bg-spot-beige text-spot-dark">
-        <header className="border-b border-spot-dark/10 bg-white/50 backdrop-blur-sm sticky top-0 z-50">
+        <MobileHeader>
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2" dir="ltr">
               <div className="flex items-center gap-1">
@@ -33,7 +35,7 @@ export default function PublicLayout({
               </div>
             </Link>
 
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden lg:flex items-center space-x-8">
               <Link
                 href="/properties"
                 className="text-sm font-medium hover:text-spot-red transition-colors"
@@ -66,16 +68,19 @@ export default function PublicLayout({
               </Link>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 lg:gap-4">
               <LanguageSwitcher />
-              <NextLink href="/login">
-                <Button variant="default" size="sm">
-                  {t("nav.login")}
-                </Button>
-              </NextLink>
+              <div className="hidden lg:block">
+                <NextLink href="/login">
+                  <Button variant="default" size="sm">
+                    {t("nav.login")}
+                  </Button>
+                </NextLink>
+              </div>
+              <MobileMenu />
             </div>
           </nav>
-        </header>
+        </MobileHeader>
 
         <main>{children}</main>
 

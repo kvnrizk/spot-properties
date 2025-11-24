@@ -44,7 +44,7 @@ function Hero() {
   const t = useTranslations();
 
   return (
-    <section className="relative h-[85vh] flex items-center justify-center">
+    <section className="relative min-h-[600px] h-[85vh] flex items-center justify-center">
       {/* Background Image */}
       <div className="absolute inset-0 bg-[url('/hero.jpg')] bg-cover bg-center">
         <div className="absolute inset-0 bg-gradient-to-b from-spot-dark/70 via-spot-dark/50 to-spot-dark/70" />
@@ -52,20 +52,20 @@ function Hero() {
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
-        <p className="text-white/90 text-sm tracking-[0.3em] uppercase mb-6 font-light">
+        <p className="text-white/90 text-xs sm:text-sm tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-4 sm:mb-6 font-light">
           LEBANON • CYPRUS
         </p>
 
-        <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 sm:mb-6 tracking-tight px-2">
           {t("hero.title")}
         </h1>
 
-        <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto font-light">
+        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-8 sm:mb-12 max-w-3xl mx-auto font-light px-4">
           {t("hero.subtitle")}
         </p>
 
         {/* Search Bar */}
-        <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-2xl p-6 border-2 border-spot-dark/10">
+        <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-2xl p-4 sm:p-6 border-2 border-spot-dark/10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             {/* Country Select */}
             <div className="lg:col-span-1">
@@ -137,18 +137,18 @@ function CountrySection() {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Lebanon Card */}
-          <div className="relative group overflow-hidden rounded-lg border-4 border-spot-dark/20 hover:border-spot-red transition-all duration-300 h-[400px]">
+          <div className="relative group overflow-hidden rounded-lg border-4 border-spot-dark/20 hover:border-spot-red transition-all duration-300 min-h-[300px] sm:h-[400px]">
             <div className="absolute inset-0 bg-gradient-to-br from-spot-beige to-spot-beige/50">
               <div className="absolute inset-0 opacity-10 bg-[url('/lebanon-pattern.jpg')] bg-cover bg-center" />
             </div>
 
-            <div className="relative h-full p-12 flex flex-col justify-center">
-              <h2 className="text-5xl font-bold text-spot-dark mb-6 tracking-tight">
+            <div className="relative h-full p-6 sm:p-8 md:p-12 flex flex-col justify-center">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-spot-dark mb-4 sm:mb-6 tracking-tight">
                 {t("lebanon.title")}
               </h2>
-              <p className="text-lg text-spot-dark/80 mb-8 max-w-md font-light leading-relaxed">
+              <p className="text-base sm:text-lg text-spot-dark/80 mb-6 sm:mb-8 max-w-md font-light leading-relaxed">
                 {t("lebanon.description")}
               </p>
               <div>
@@ -161,16 +161,16 @@ function CountrySection() {
           </div>
 
           {/* Cyprus Card */}
-          <div className="relative group overflow-hidden rounded-lg border-4 border-spot-dark/20 hover:border-spot-red transition-all duration-300 h-[400px]">
+          <div className="relative group overflow-hidden rounded-lg border-4 border-spot-dark/20 hover:border-spot-red transition-all duration-300 min-h-[300px] sm:h-[400px]">
             <div className="absolute inset-0 bg-gradient-to-br from-spot-beige to-spot-beige/50">
               <div className="absolute inset-0 opacity-10 bg-[url('/cyprus-pattern.jpg')] bg-cover bg-center" />
             </div>
 
-            <div className="relative h-full p-12 flex flex-col justify-center">
-              <h2 className="text-5xl font-bold text-spot-dark mb-6 tracking-tight">
+            <div className="relative h-full p-6 sm:p-8 md:p-12 flex flex-col justify-center">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-spot-dark mb-4 sm:mb-6 tracking-tight">
                 {t("cyprus.title")}
               </h2>
-              <p className="text-lg text-spot-dark/80 mb-8 max-w-md font-light leading-relaxed">
+              <p className="text-base sm:text-lg text-spot-dark/80 mb-6 sm:mb-8 max-w-md font-light leading-relaxed">
                 {t("cyprus.description")}
               </p>
               <div>
@@ -200,23 +200,23 @@ function CategorySection() {
   ];
 
   return (
-    <section className="py-20 bg-spot-beige">
+    <section className="py-12 sm:py-16 md:py-20 bg-spot-beige">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl md:text-5xl font-bold text-spot-dark text-center mb-4 tracking-tight uppercase tracking-wide">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-spot-dark text-center mb-4 tracking-tight uppercase tracking-wide">
           {t("categories.title")}
         </h2>
-        <div className="w-24 h-1 bg-spot-red mx-auto mb-16" />
+        <div className="w-16 sm:w-24 h-1 bg-spot-red mx-auto mb-8 sm:mb-12 md:mb-16" />
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
           {categories.map((category) => (
             <div
               key={category.title}
-              className="group bg-white rounded-lg border-2 border-spot-dark/20 p-8 text-center hover:border-spot-red hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+              className="group bg-white rounded-lg border-2 border-spot-dark/20 p-4 sm:p-6 md:p-8 text-center hover:border-spot-red hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
             >
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-spot-beige group-hover:bg-spot-red/10 flex items-center justify-center transition-colors">
-                <category.icon className="w-8 h-8 text-spot-red" strokeWidth={1.5} />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-2 sm:mb-3 md:mb-4 rounded-full bg-spot-beige group-hover:bg-spot-red/10 flex items-center justify-center transition-colors">
+                <category.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-spot-red" strokeWidth={1.5} />
               </div>
-              <h3 className="text-lg font-semibold text-spot-dark group-hover:text-spot-red transition-colors">
+              <h3 className="text-sm sm:text-base md:text-lg font-semibold text-spot-dark group-hover:text-spot-red transition-colors">
                 {category.title}
               </h3>
             </div>
@@ -235,12 +235,12 @@ function FeaturedSection({ properties }: FeaturedSectionProps) {
   const t = useTranslations();
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-12 sm:py-16 md:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl md:text-5xl font-bold text-spot-dark text-center mb-4 tracking-tight uppercase tracking-wide">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-spot-dark text-center mb-4 tracking-tight uppercase tracking-wide">
           {t("featured.title")}
         </h2>
-        <div className="w-24 h-1 bg-spot-red mx-auto mb-16" />
+        <div className="w-16 sm:w-24 h-1 bg-spot-red mx-auto mb-8 sm:mb-12 md:mb-16" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {properties.map((property) => {
@@ -329,24 +329,24 @@ function AboutSection() {
   const t = useTranslations();
 
   return (
-    <section className="py-20 bg-spot-beige">
+    <section className="py-12 sm:py-16 md:py-20 bg-spot-beige">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
           {/* Text Content */}
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-spot-dark mb-4 tracking-tight uppercase tracking-wide">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-spot-dark mb-4 tracking-tight uppercase tracking-wide">
               {t("about.title")}
             </h2>
-            <p className="text-xl text-spot-red font-semibold mb-8">
+            <p className="text-lg sm:text-xl text-spot-red font-semibold mb-6 sm:mb-8">
               {t("about.subtitle")}
             </p>
-            <p className="text-lg text-spot-dark/80 leading-relaxed font-light">
+            <p className="text-base sm:text-lg text-spot-dark/80 leading-relaxed font-light">
               {t("about.body")}
             </p>
           </div>
 
           {/* Video Block */}
-          <div className="relative h-[400px] rounded-lg border-4 border-spot-dark/20 overflow-hidden">
+          <div className="relative h-[250px] sm:h-[300px] md:h-[400px] rounded-lg border-4 border-spot-dark/20 overflow-hidden">
             <video
               className="w-full h-full object-cover"
               autoPlay
@@ -369,20 +369,20 @@ function CTASection() {
   const t = useTranslations();
 
   return (
-    <section className="py-20 bg-[#ecddc9]">
+    <section className="py-12 sm:py-16 md:py-20 bg-[#ecddc9]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-4xl md:text-5xl font-bold text-spot-dark mb-4 tracking-tight">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-spot-dark mb-4 tracking-tight">
           {t("cta.title")}
         </h2>
-        <p className="text-xl text-spot-dark/80 mb-12 font-light">
+        <p className="text-base sm:text-lg md:text-xl text-spot-dark/80 mb-8 sm:mb-12 font-light">
           {t("cta.subtitle")}
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-          <button className="bg-spot-dark hover:bg-spot-dark/90 text-white font-semibold py-4 px-10 rounded-md transition-all duration-200 border-2 border-spot-dark hover:shadow-2xl text-lg">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
+          <button className="w-full sm:w-auto bg-spot-dark hover:bg-spot-dark/90 text-white font-semibold py-3 sm:py-4 px-8 sm:px-10 rounded-md transition-all duration-200 border-2 border-spot-dark hover:shadow-2xl text-base sm:text-lg">
             {t("cta.contact")}
           </button>
-          <button className="bg-transparent hover:bg-spot-dark/5 text-spot-dark font-semibold py-4 px-10 rounded-md transition-all duration-200 border-2 border-spot-dark text-lg">
+          <button className="w-full sm:w-auto bg-transparent hover:bg-spot-dark/5 text-spot-dark font-semibold py-3 sm:py-4 px-8 sm:px-10 rounded-md transition-all duration-200 border-2 border-spot-dark text-base sm:text-lg">
             {t("cta.whatsapp")}
           </button>
         </div>

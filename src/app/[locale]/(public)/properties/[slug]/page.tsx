@@ -157,20 +157,20 @@ async function PropertyDetailContent({ slug }: { slug: string }) {
       />
 
       {/* Main Content */}
-      <section className="py-12">
+      <section className="py-6 sm:py-8 md:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
             {/* Left Column - Property Details */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 space-y-6 sm:space-y-8">
               {/* Price */}
-              <div className="bg-white rounded-lg border-2 border-spot-dark/20 p-6">
+              <div className="bg-white rounded-lg border-2 border-spot-dark/20 p-4 sm:p-6">
                 <div className="flex items-center gap-2 text-spot-dark/70 mb-2">
                   <DollarSign className="w-5 h-5 text-spot-red" />
-                  <span className="text-sm font-semibold uppercase tracking-wider">
+                  <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider">
                     {t("price")}
                   </span>
                 </div>
-                <div className="text-4xl font-bold text-spot-red">
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-spot-red">
                   ${property.price.toLocaleString()} {property.currency}
                 </div>
               </div>
@@ -192,11 +192,11 @@ async function PropertyDetailContent({ slug }: { slug: string }) {
 
               {/* Description */}
               {property.description && (
-                <div className="bg-white rounded-lg border-2 border-spot-dark/20 p-6">
-                  <h2 className="text-2xl font-bold text-spot-dark mb-4">
+                <div className="bg-white rounded-lg border-2 border-spot-dark/20 p-4 sm:p-6">
+                  <h2 className="text-xl sm:text-2xl font-bold text-spot-dark mb-3 sm:mb-4">
                     {t("description")}
                   </h2>
-                  <p className="text-spot-dark/80 leading-relaxed whitespace-pre-line">
+                  <p className="text-sm sm:text-base text-spot-dark/80 leading-relaxed whitespace-pre-line">
                     {property.description}
                   </p>
                 </div>
