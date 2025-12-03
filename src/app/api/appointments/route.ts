@@ -79,23 +79,28 @@ export async function POST(request: NextRequest) {
     // Format phone number for WhatsApp: +961 XX XXX XXX
     let sanitizedPhone = "";
     if (phone) {
-      // Remove all non-digit characters
-      const digitsOnly = phone.replace(/\D/g, "");
+      try {
+        // Remove all non-digit characters
+        const digitsOnly = phone.replace(/\D/g, "");
 
-      // Check if it starts with 961 (Lebanon country code)
-      if (digitsOnly.startsWith("961")) {
-        // Format: +961 XX XXX XXX
-        const countryCode = "961";
-        const rest = digitsOnly.substring(3);
-        if (rest.length >= 8) {
-          sanitizedPhone = `+${countryCode} ${rest.substring(0, 2)} ${rest.substring(2, 5)} ${rest.substring(5)}`;
+        // Check if it starts with 961 (Lebanon country code)
+        if (digitsOnly.startsWith("961")) {
+          // Format: +961 XX XXX XXX
+          const countryCode = "961";
+          const rest = digitsOnly.substring(3);
+          if (rest.length >= 8) {
+            sanitizedPhone = `+${countryCode} ${rest.substring(0, 2)} ${rest.substring(2, 5)} ${rest.substring(5)}`;
+          } else {
+            sanitizedPhone = `+${countryCode} ${rest}`;
+          }
+        } else if (digitsOnly.length >= 8) {
+          // Assume it's a local number, add +961
+          sanitizedPhone = `+961 ${digitsOnly.substring(0, 2)} ${digitsOnly.substring(2, 5)} ${digitsOnly.substring(5)}`;
         } else {
-          sanitizedPhone = `+${countryCode} ${rest}`;
+          sanitizedPhone = sanitizeInput(phone);
         }
-      } else if (digitsOnly.length >= 8) {
-        // Assume it's a local number, add +961
-        sanitizedPhone = `+961 ${digitsOnly.substring(0, 2)} ${digitsOnly.substring(2, 5)} ${digitsOnly.substring(5)}`;
-      } else {
+      } catch (error) {
+        // If formatting fails, just sanitize the input
         sanitizedPhone = sanitizeInput(phone);
       }
     }
@@ -136,8 +141,21 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error creating appointment:", error);
+
+    // Log more detailed error information
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const errorStack = error instanceof Error ? error.stack : "";
+
+    console.error("Error details:", {
+      message: errorMessage,
+      stack: errorStack,
+    });
+
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error: "Internal server error",
+        details: process.env.NODE_ENV === "development" ? errorMessage : undefined
+      },
       { status: 500 }
     );
   }
