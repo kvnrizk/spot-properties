@@ -75,7 +75,31 @@ export async function POST(request: NextRequest) {
     // Sanitize inputs
     const sanitizedName = sanitizeInput(name);
     const sanitizedEmail = sanitizeInput(email);
-    const sanitizedPhone = phone ? sanitizeInput(phone) : "";
+
+    // Format phone number for WhatsApp: +961 XX XXX XXX
+    let sanitizedPhone = "";
+    if (phone) {
+      // Remove all non-digit characters
+      const digitsOnly = phone.replace(/\D/g, "");
+
+      // Check if it starts with 961 (Lebanon country code)
+      if (digitsOnly.startsWith("961")) {
+        // Format: +961 XX XXX XXX
+        const countryCode = "961";
+        const rest = digitsOnly.substring(3);
+        if (rest.length >= 8) {
+          sanitizedPhone = `+${countryCode} ${rest.substring(0, 2)} ${rest.substring(2, 5)} ${rest.substring(5)}`;
+        } else {
+          sanitizedPhone = `+${countryCode} ${rest}`;
+        }
+      } else if (digitsOnly.length >= 8) {
+        // Assume it's a local number, add +961
+        sanitizedPhone = `+961 ${digitsOnly.substring(0, 2)} ${digitsOnly.substring(2, 5)} ${digitsOnly.substring(5)}`;
+      } else {
+        sanitizedPhone = sanitizeInput(phone);
+      }
+    }
+
     const sanitizedMessage = message ? sanitizeHTML(message) : null;
     const appointmentDate = new Date(date);
 
