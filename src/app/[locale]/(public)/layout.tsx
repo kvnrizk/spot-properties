@@ -78,15 +78,6 @@ export default function PublicLayout({
                 <LanguageSwitcher />
               </div>
 
-              {/* Login Button - Desktop only */}
-              <div className="hidden lg:block">
-                <NextLink href="/login">
-                  <Button variant="default" size="sm">
-                    {t("nav.login")}
-                  </Button>
-                </NextLink>
-              </div>
-
               {/* Mobile Navigation - Hamburger + Drawer */}
               <MobileNav />
             </div>

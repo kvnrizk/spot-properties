@@ -167,10 +167,12 @@ function CountrySection() {
                 {t("lebanon.description")}
               </p>
               <div>
-                <button className="bg-spot-red hover:bg-spot-red/90 text-white font-semibold py-3 px-8 rounded-md transition-all duration-200 border-2 border-spot-red inline-flex items-center gap-2 group-hover:shadow-lg">
-                  {t("lebanon.viewListings")}
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </button>
+                <Link href="/lebanon">
+                  <button className="bg-spot-red hover:bg-spot-red/90 text-white font-semibold py-3 px-8 rounded-md transition-all duration-200 border-2 border-spot-red inline-flex items-center gap-2 group-hover:shadow-lg">
+                    {t("lebanon.viewListings")}
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -189,10 +191,12 @@ function CountrySection() {
                 {t("cyprus.description")}
               </p>
               <div>
-                <button className="bg-spot-red hover:bg-spot-red/90 text-white font-semibold py-3 px-8 rounded-md transition-all duration-200 border-2 border-spot-red inline-flex items-center gap-2 group-hover:shadow-lg">
-                  {t("cyprus.viewListings")}
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </button>
+                <Link href="/cyprus">
+                  <button className="bg-spot-red hover:bg-spot-red/90 text-white font-semibold py-3 px-8 rounded-md transition-all duration-200 border-2 border-spot-red inline-flex items-center gap-2 group-hover:shadow-lg">
+                    {t("cyprus.viewListings")}
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

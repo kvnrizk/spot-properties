@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
-import { Menu, X, Home, Building2, MapPin, Info, Mail, Globe, LogIn } from "lucide-react";
+import { Menu, X, Home, Building2, MapPin, Info, Mail, Globe } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
 import { LanguageSwitcher } from "./language-switcher";
@@ -40,7 +40,6 @@ export function MobileNav() {
     { href: "/cyprus", label: t("nav.cyprus"), icon: MapPin },
     { href: "/about", label: t("nav.about"), icon: Info },
     { href: "/contact", label: t("nav.contact"), icon: Mail },
-    { href: "/login", label: t("nav.login"), icon: LogIn },
   ];
 
   return (
