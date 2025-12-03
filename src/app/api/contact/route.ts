@@ -41,8 +41,8 @@ export async function POST(request: NextRequest) {
 
     if (!validateRequired(message)) {
       errors.message = "Message is required";
-    } else if (message.length < 10) {
-      errors.message = "Message must be at least 10 characters";
+    } else if (message.length < 3) {
+      errors.message = "Message must be at least 3 characters";
     } else if (message.length > 5000) {
       errors.message = "Message must be less than 5000 characters";
     }

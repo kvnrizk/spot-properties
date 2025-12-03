@@ -71,9 +71,16 @@ export default function PropertyContactForm({ propertyId, propertyTitle, propert
         }),
       });
 
-      const data = await response.json();
+      // Check if response has content before parsing JSON
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : {};
 
       if (!response.ok) {
+        // Show detailed validation errors if available
+        if (data.details) {
+          const errorMessages = Object.values(data.details).join(", ");
+          throw new Error(errorMessages);
+        }
         throw new Error(data.error || "Failed to submit form");
       }
 
@@ -104,9 +111,16 @@ export default function PropertyContactForm({ propertyId, propertyTitle, propert
         }),
       });
 
-      const data = await response.json();
+      // Check if response has content before parsing JSON
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : {};
 
       if (!response.ok) {
+        // Show detailed validation errors if available
+        if (data.details) {
+          const errorMessages = Object.values(data.details).join(", ");
+          throw new Error(errorMessages);
+        }
         throw new Error(data.error || "Failed to submit form");
       }
 
