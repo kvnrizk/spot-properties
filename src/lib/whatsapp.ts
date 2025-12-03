@@ -8,10 +8,11 @@ import { cleanBaseUrl } from "@/lib/env";
 /**
  * Generates a WhatsApp link with the configured phone number and encoded message
  * @param message - The message to pre-fill in WhatsApp chat
+ * @param customPhoneNumber - Optional custom phone number to use instead of default
  * @returns Full WhatsApp web URL with encoded message
  */
-export function generateWhatsAppLink(message: string): string {
-  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '';
+export function generateWhatsAppLink(message: string, customPhoneNumber?: string): string {
+  const phoneNumber = customPhoneNumber || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '';
 
   if (!phoneNumber) {
     console.warn('NEXT_PUBLIC_WHATSAPP_NUMBER is not configured');

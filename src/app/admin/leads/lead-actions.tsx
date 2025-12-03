@@ -28,7 +28,8 @@ export function LeadActions({ leadId, isHandled, leadName, leadPhone, propertyTi
     }
 
     const message = getAdminLeadWhatsAppMessage(leadName, propertyTitle || undefined);
-    const link = generateWhatsAppLink(message);
+    // Use the customer's phone number instead of the business number
+    const link = generateWhatsAppLink(message, leadPhone);
     window.open(link, '_blank', 'noopener,noreferrer');
     toast.success('Opening WhatsApp...');
   };

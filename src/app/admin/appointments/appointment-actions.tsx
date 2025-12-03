@@ -29,7 +29,8 @@ export function AppointmentActions({
       propertyTitle,
       appointmentDate
     );
-    const link = generateWhatsAppLink(message);
+    // Use the customer's phone number instead of the business number
+    const link = generateWhatsAppLink(message, appointmentPhone);
     window.open(link, '_blank', 'noopener,noreferrer');
     toast.success('Opening WhatsApp...');
   };
