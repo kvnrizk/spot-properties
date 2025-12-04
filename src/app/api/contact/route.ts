@@ -41,7 +41,16 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("[Contact API] Received POST request");
+
     const body: ContactFormData = await request.json();
+    console.log("[Contact API] Request body:", {
+      name: body.name,
+      email: body.email,
+      hasPhone: !!body.phone,
+      messageLength: body.message?.length
+    });
+
     const { name, email, phone, message, propertyId } = body;
 
     // Validation errors object
@@ -117,6 +126,8 @@ export async function POST(request: NextRequest) {
 
     const sanitizedMessage = sanitizeHTML(message);
 
+    console.log("[Contact API] Creating lead in database...");
+
     // Create lead in database
     const lead = await db.lead.create({
       data: {
@@ -129,7 +140,10 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    console.log("[Contact API] Lead created successfully:", lead.id);
+
     // Log activity
+    console.log("[Contact API] Logging activity...");
     await logActivity({
       action: ActivityAction.SUBMIT,
       entity: ActivityEntity.CONTACT,
@@ -141,6 +155,8 @@ export async function POST(request: NextRequest) {
         propertyId: propertyId || null,
       },
     });
+
+    console.log("[Contact API] Activity logged successfully");
 
     return NextResponse.json({
       success: true,
